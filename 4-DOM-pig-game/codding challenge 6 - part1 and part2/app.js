@@ -55,7 +55,7 @@ document.querySelector(".btn-roll").addEventListener("click", function () {
       document.querySelector(
         `#current-${activePlayer}`
       ).textContent = roundScore;
-    } else if (sixCount === 6) {
+    } else if (sixCount === 2) {
       //se a contagem for 2, quer dizer que dois 6 sairam em seguinda, logo zera o score total
       scores[activePlayer] = 0;
       document.querySelector("#score-" + activePlayer).textContent = 0;
@@ -109,7 +109,7 @@ document.querySelector(".btn-new").addEventListener("click", init);
 
 //Verifica se os 6 sairam seguidos, se sairam sixCount ficará 2
 function sixVerify() {
-  if (dice === 3) {
+  if (dice === 6) {
     sixCount++;
   } else {
     sixCount = 0;
