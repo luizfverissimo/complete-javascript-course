@@ -8,7 +8,7 @@ GAME RULES:
 - The first player to reach 100 points on GLOBAL score wins the game
 
 */
-var scores, roundScore, activePlayer, gamePlaying, scoreMax, sixCount, dice;
+var scores, roundScore, activePlayer, gamePlaying, scoreMax, dice0, dice1;
 
 init();
 function init() {
@@ -18,7 +18,8 @@ function init() {
   roundScore = 0;
   activePlayer = 0; //player 01 = 0, player 2 = 1
   //modifica o estilo .display para none = some com a imagem do dado no inicio
-  document.querySelector(".dice").style.display = "none";
+  document.querySelector("#dice-0").style.display = "none";
+  document.querySelector("#dice-1").style.display = "none";
   //Modifica os valores para zero - placar geral e plarcar da rodada
   document.getElementById("score-0").textContent = "0";
   document.getElementById("score-1").textContent = "0";
@@ -38,28 +39,32 @@ function init() {
 document.querySelector(".btn-roll").addEventListener("click", function () {
   if (gamePlaying) {
     //Gera um número randômico entre 1 a 6
-    dice = Math.floor(Math.random() * 6) + 1;
-    sixVerify(); //chama a contagem cada vez que apertamos o botão
+    dice0 = Math.floor(Math.random() * 6) + 1;
+    dice1 = Math.floor(Math.random() * 6) + 1;
     //Mostra o resultado:
     //adiciona esse texto em uma variável para não ficar escrevendo
-    var diceDom = document.querySelector(".dice");
-    diceDom.style.display = "block"; //block faz aparecer a imagem
-    diceDom.src = `dice-${dice}.png`;
+    var diceDom0 = document.querySelector("#dice-0");
+    var diceDom1 = document.querySelector("#dice-1");
+    diceDom0.style.display = "block"; //block faz aparecer a imagem
+    diceDom1.style.display = "block";
+    diceDom0.src = `dice-${dice0}.png`;
+    diceDom1.src = `dice-${dice1}.png`;
     //Define o score máximo
     scoreMax = document.getElementById("inp-number").value;
 
     //Atualiza o round score somente IF o valor não for 1
-    if (dice !== 1 && sixCount !== 2) {
-      //add score
-      roundScore += dice;
-      document.querySelector(
-        `#current-${activePlayer}`
-      ).textContent = roundScore;
-    } else if (sixCount === 2) {
-      //se a contagem for 2, quer dizer que dois 6 sairam em seguinda, logo zera o score total
+    if (dice0 === 6 && dice1 === 6) {
+      //se o tirar no dado o seis nos dois dados, perde todos os pontos
       scores[activePlayer] = 0;
       document.querySelector("#score-" + activePlayer).textContent = 0;
       nextPlayer();
+    } else if (dice0 !== 1 && dice1 !== 1) {
+      //add score
+      roundScore += dice0 + dice1;
+      document.querySelector(
+        `#current-${activePlayer}`
+      ).textContent = roundScore;
+      console.log(dice0, dice1);
     } else {
       //Next player
       nextPlayer();
@@ -102,16 +107,8 @@ function nextPlayer() {
   document.getElementById("current-1").textContent = "0";
   document.querySelector(".player-0-panel").classList.toggle("active");
   document.querySelector(".player-1-panel").classList.toggle("active");
-  document.querySelector(".dice").style.display = "none";
+  document.querySelector("#dice-0").style.display = "none";
+  document.querySelector("#dice-1").style.display = "none";
 }
 
 document.querySelector(".btn-new").addEventListener("click", init);
-
-//Verifica se os 6 sairam seguidos, se sairam sixCount ficará 2
-function sixVerify() {
-  if (dice === 6) {
-    sixCount++;
-  } else {
-    sixCount = 0;
-  }
-}
