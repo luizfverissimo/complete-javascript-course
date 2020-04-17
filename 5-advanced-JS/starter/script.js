@@ -111,7 +111,7 @@ console.log(obj.city)
 */
 
 //Functions: passing functions as arguments
-
+/*
 var years = [1990, 1965, 1937, 2005, 1998];
 function arrayCalc(arr, fn) {
   var arrRes = [];
@@ -146,3 +146,134 @@ var rates = arrayCalc(ages, MaxHR)
 console.log(ages);
 console.log(fullAges)
 console.log(rates)
+*/
+
+//Functions returning Functions
+/*
+function interviewQuestion(job) {
+  if (job === "designer") {
+    return function (name) {
+      console.log(name + ", can you please explain what UX design is?");
+    };
+  } else if (job === "teacher") {
+    return function (name) {
+      console.log(`What subject do you teach, ${name}?`);
+    };
+  } else {
+    return function (name) {
+      console.log(`Hello ${name}, what do you do?`);
+    };
+  }
+}
+
+var teacherQuestion = interviewQuestion("teacher");
+var designerQUestion = interviewQuestion('designer')
+
+teacherQuestion("John");
+designerQUestion('John')
+designerQUestion('Jane')
+designerQUestion('Mark')
+
+interviewQuestion('teacher')('Mark')
+*/
+/*
+// IIFE
+(function (goodLuck) {
+  var score = Math.random() * 10
+  console.log(score >= 5 - goodLuck)
+})(5); //cria um novo escopo escondido da variável global - privacidade de dados - não conseguimos acessar de fora
+*/
+
+//Closures
+/*
+function retirement(retirementAge){
+  var a = ' year left until retirement.'
+  return function(yearOfBirth){
+    var age = 2020 - yearOfBirth
+    console.log((retirementAge - age) + a)
+  }
+}
+
+var retirementUS = retirement(66)
+retirementUS(1990)
+var retirementGermany = retirement(65)
+retirementGermany(1990)
+var retirementIceland = retirement(67)
+retirementIceland(1990)
+*/
+
+//Interview example with closures
+// minha resolução:
+/*
+function interviewQuestion(name){
+  var teacher = `What subject do you teach, ${name}?`
+  var design = name + ", can you please explain what UX design is?"
+  var a = `Hello, ${name}!`
+  return function(job){
+    if (job === 'designer'){
+      console.log(design)
+    } else if (job === 'teacher'){
+      console.log(teacher)
+    } else {
+      console.log(a)
+    }
+  }
+}
+
+var john = interviewQuestion('John')
+var mark = interviewQuestion('Mark')
+var jane = interviewQuestion('Jane')
+
+john('teacher')
+mark('designer')
+jane('')
+*/
+//resolução do professor
+/*
+function interviewQuestion(job){
+  return function(name){
+    if(job === 'designer'){
+      console.log(name + ", can you please explain what UX design is?")
+    } else if (job === 'teacher'){
+      console.log(`What subject do you teach, ${name}?`)
+    } else {
+      console.log(`Hello ${name}, what do you do?`)
+    }
+  }
+}
+
+interviewQuestion('designer')('John')
+*/
+
+// Bind, Call and Apply
+
+var john = {
+  name: 'John',
+  age: 26,
+  job: 'teacher',
+  presentation: function(style, timeOfDay) {
+    if (style === 'formal'){
+      console.log(`Good ${timeOfDay}, Ladies and gentlemen! I'm ${this.name}, I'm a ${this.job} and I'm ${this.age} years old.`)
+    } else if (style === 'friendly'){
+      console.log(`Hey! What's up? I'm ${this.name}, I'm a ${this.job} and I'm ${this.age} years old. Have a nice ${timeOfDay}`)
+    }
+  }
+}
+
+var emily = {
+  name: 'Emily',
+  age: 35,
+  job: 'designer'
+}
+
+john.presentation('formal', 'morning')
+john.presentation.call(emily, 'friendly', 'afternoon')
+
+//john.presentation.apply(emily, ['friendly', 'afternoon'])
+
+var johnFriendly = john.presentation.bind(john, 'friendly')
+johnFriendly('morning')
+johnFriendly('night')
+
+var emilyFormal = john.presentation.bind(emily, 'formal')
+emilyFormal('afternoon')
