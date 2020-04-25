@@ -391,7 +391,7 @@ var john = new SMithPerson("John", 1990);
 
 var emily = new SMithPerson('Emily', 1983, 'Diaz', 'spanish')
 */
-
+/*
 //ES6
 function SmithPerson (firstName, yearOfBirth, lastName = 'Smith', nationality = 'american') {
     this.firstName = firstName;
@@ -403,3 +403,291 @@ function SmithPerson (firstName, yearOfBirth, lastName = 'Smith', nationality = 
 var john = new SmithPerson("John", 1990);
 
 var emily = new SmithPerson('Emily', 1983, 'Diaz', 'spanish')
+*/
+
+///////////////////////////////////////////////////////////////////////////////
+//Maps - data structure
+/*
+const question = new Map()
+
+question.set('question', 'What is the offical name of the lastest major JavaScript version?')
+question.set(1, 'ES5')
+question.set(2, 'ES6')
+question.set(3, 'ES2015')
+question.set(4, 'ES7')
+question.set('correct', 3)
+
+question.set(true, 'Correct answer!')
+question.set(false, 'Wrong, try again')
+
+console.log(question.get('question'))
+//console.log(question.size)
+
+if (question.has(4)) {
+    //question.delete(4)
+    //console.log('Answer 4 is here')
+}
+
+//question.clear()
+
+//question.forEach((value, key) => console.log(`This is ${key}, and it's set to ${value}`))
+
+for (let [key, value] of question.entries()){
+    if (typeof(key) === 'number'){
+        console.log(`Answer ${key}: ${value}`)
+    }
+}
+
+const ans = parseInt(prompt('Write the correct answer'))
+
+console.log(question.get(ans === question.get('correct')))
+*/
+
+///////////////////////////////////////////////////////////////////////////////
+//Classes
+
+//ES5
+/*
+var Person5 = function(name, yearOfBirth, job) {
+    this.name = name
+    this.yearOfBirth = yearOfBirth
+    this.job = job
+}
+
+Person5.prototype.calculateAge = function(){
+    var age = new Date().getFullYear - this.yearOfBirth
+    console.log(age)
+}
+
+var john5 = new Person5('John', 1990, 'teacher')
+
+//ES6
+class Person6 {
+    constructor (name, yearOfBirth, job){
+        this.name = name
+        this.yearOfBirth = yearOfBirth
+        this.job = job
+    }
+
+    calculateAge() {
+        let age = new Date().getFullYear - this.yearOfBirth
+        console.log(age)
+    }
+
+    static greetting(){
+        console.log('Hey there!')
+    }
+}
+
+const john6 = new Person6('John', 1990, 'teacher')
+
+Person6.greetting()
+*/
+
+///////////////////////////////////////////////////////////////////////////////
+//Classe e subclasses
+
+//ES5
+/*
+var Person5 = function(name, yearOfBirth, job) {
+    this.name = name
+    this.yearOfBirth = yearOfBirth
+    this.job = job
+}
+
+Person5.prototype.calculateAge = function(){
+    var age = new Date().getFullYear() - this.yearOfBirth
+    console.log(age)
+}
+
+var Athlete5 = function(name, yearOfBirth, job, olympicGames, medals){
+    Person5.call(this, name, yearOfBirth, job)
+    this.olympicGames = olympicGames
+    this.medals = medals
+}
+
+
+
+Athlete5.prototype = Object.create(Person5.prototype)
+
+Athlete5.prototype.wonMedal = function(){
+    this.medals++
+    console.log(this.medals)
+}
+
+var johnAthlete5 = new Athlete5('John', 1990, 'swimmer', 3, 10)
+johnAthlete5.calculateAge()
+johnAthlete5.wonMedal()
+
+//ES6
+class Person6 {
+    constructor (name, yearOfBirth, job){
+        this.name = name
+        this.yearOfBirth = yearOfBirth
+        this.job = job
+    }
+
+    calculateAge() {
+        let age = new Date().getFullYear() - this.yearOfBirth
+        console.log(age)
+    }
+}
+
+class Athlete6 extends Person6 {
+    constructor (name, yearOfBirth, job, olympicGames, medals){
+        super(name, yearOfBirth, job)
+        this.olympicGames = olympicGames
+        this.medals = medals
+    }
+
+    wonMedal(){
+        this.medals++
+        console.log(this.medals)
+    }
+}
+
+const johnAthlete6 = new Athlete6('John', 1990, 'swimmer', 3, 10)
+
+johnAthlete6.wonMedal()
+johnAthlete6.calculateAge()
+*/
+
+/////////////////////////////////
+// CODING CHALLENGE
+
+/*
+
+Suppose that you're working in a small town administration, and you're in charge of two town elements:
+1. Parks
+2. Streets
+
+It's a very small town, so right now there are only 3 parks and 4 streets. All parks and streets have a name and a build year.
+
+At an end-of-year meeting, your boss wants a final report with the following:
+1. Tree density of each park in the town (forumla: number of trees/park area)
+2. Average age of each town's park (forumla: sum of all ages/number of parks)
+3. The name of the park that has more than 1000 trees
+4. Total and average length of the town's streets
+5. Size classification of all streets: tiny/small/normal/big/huge. If the size is unknown, the default is normal
+
+All the report data should be printed to the console.
+
+HINT: Use some of the ES6 features: classes, subclasses, template strings, default parameters, maps, arrow functions, destructuring, etc.
+
+*/
+///////////////////////////////////////////////////////////////////////////////
+//Minha resolução:
+///////////////////////////////////////////////////////////////////////////////
+//Constructors
+
+class Elements {
+    constructor (name, buildYear){
+        this.name = name
+        this.buildYear = buildYear
+    }
+
+    calculateAge(){
+        let age = new Date().getFullYear() - this.buildYear
+        return age
+    }
+    
+}
+
+class Street extends Elements {
+    constructor (name, buildYear, length, size = 'normal'){
+        super (name, buildYear)
+        this.length = length
+        this.size = size
+    }
+}
+
+class Parks extends Elements {
+    constructor(name, buildYear, treeNumber, parkArea){
+        super(name, buildYear)
+        this.treeNumber = treeNumber
+        this.parkArea = parkArea
+    }
+
+    calcDensity(){
+        let treeDensity = this.treeNumber / this.parkArea
+        return treeDensity
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//Construção de parques (3) e ruas (4).
+
+let parks, streets
+
+let park1 = new Parks('Central Park', 1985, 972, 25)
+let park2 = new Parks('East Park', 1990, 2054, 13)
+let park3 = new Parks('South Park', 1936, 5430, 165)
+
+let street1 = new Street('1st street', 1936, 5, 'big')
+let street2 = new Street('Lincon Avenue', 1976, 13,)
+let street3 = new Street('Beira-mar street', 1990, 3, 'huge')
+let street4 = new Street('Rural street', 1940, 10, 'small')
+
+parks = [park1, park2, park3]
+streets = [street1, street2, street3, street4]
+
+///////////////////////////////////////////////////////////////////////////////
+//Dados para o relatório
+
+//Média da idade dos parques
+let calcAverageParkAge = () => {
+    let sumAges = 0
+    let average
+    parks.forEach(cur => {
+        sumAges += cur.calculateAge()
+    })
+    average = sumAges / parks.length
+    //relatório no console
+    console.log(`Our ${parks.length} parks have an average of ${Math.floor(average)} years`)
+}
+
+//Calcula a densidade de árvores de cada parque
+let treeDensity = () => {
+    parks.forEach(cur => {
+        console.log(`${cur.name} has a tree density of ${Math.floor(cur.calcDensity())} trees per square km.`)
+    })
+}
+
+//Parques com mais de 1000 árvores
+let treeCount = () => {
+    parks.forEach(cur => {
+        let limitTree = 1000
+        if(cur.treeNumber > limitTree){
+            console.log(`${cur.name} has more than ${limitTree} trees`)
+        }
+    })
+}
+
+//Média do comprimento das ruas
+let calcAverageStreetLength = () =>{
+    let sumLength = 0
+    let average
+    streets.forEach(cur => sumLength += cur.length)
+    average = sumLength / streets.length
+    console.log(`Our ${streets.length} streets have a total length of ${sumLength} km, with an average of ${average} km`)
+}
+
+let streetsInfo = () => {
+    streets.forEach(cur => console.log(`${cur.name}, built in ${cur.buildYear} , is a ${cur.size} street.`))
+}
+
+//Função relatório final
+let buildReport = () => {
+    console.log(`----PARKS REPORT----`)
+    calcAverageParkAge()
+    treeDensity()
+    treeCount()
+    console.log(`----STREETS REPORT----`)
+    calcAverageStreetLength()
+    streetsInfo()
+}
+
+buildReport()
+
+///////////////////////////////////////////////////////////////////////////////
+//Teacher's Solution - Está na pasta final
