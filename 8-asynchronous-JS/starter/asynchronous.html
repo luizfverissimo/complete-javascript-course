@@ -50,7 +50,7 @@
         }
         getRecipe()
         */
-
+        /*
         const getIDs = new Promise((resolve, reject) => {
             setTimeout(() =>{
                 resolve([523, 254, 432, 974])
@@ -81,7 +81,7 @@
                 }, 1500, publisher)
             })
         }
-/*
+
         getIDs
         .then(IDs => {
             console.log(IDs)
@@ -97,7 +97,7 @@
         .catch(error =>{
             console.log('Error!!')
         })
-*/
+
 
         async function getRecipesAW (){
             const IDs = await getIDs
@@ -110,9 +110,46 @@
             return recipe
         }
         getRecipesAW().then(res => console.log(`${res} is the best ever!`))
+*/
+        function getWeather(woeid){
+            fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(`https://www.metaweather.com/api/location/${woeid}/`)}`)
+            .then(response => {
+	            if (response.ok) return response.json()
+	            throw new Error('Network response was not ok.')
+            })
+            .then(data =>{
+                //console.log(data)
+                const today = data.consolidated_weather[0]
+                console.log(`Temperature today in ${data.title} stay between ${today.min_temp} and ${today.max_temp} `)
+            })
+            .catch(error =>{
+                //console.log(error)
+            })
+        }
+        //getWeather(44418)
+        //getWeather(2487956)
+        //getWeather(455832)
+
+        async function getWeatherAW(woeid){
+            try {
+                const result = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(`https://www.metaweather.com/api/location/${woeid}/`)}`)
+                const data = await result.json()
+                const tomorrow = data.consolidated_weather[1]
+                console.log(`Temperature tomorrow in ${data.title} stay between ${tomorrow.min_temp} and ${tomorrow.max_temp}.`)
+                return data
+            } catch (error){
+                console.log(error)
+            }
+
+        }
+        let dataLondon
+
+        getWeatherAW(44418).then(data => {
+            dataLondon = data
+            console.log(dataLondon)        
+        })
+        getWeatherAW(2487956)
         
-
-
     </script>
 </body>
 </html>
