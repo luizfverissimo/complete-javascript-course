@@ -34,20 +34,21 @@ export default class Recipe {
     parseIngridients() {
         const unitsLong = ['tablespoons', 'tablespoon', 'ounces', 'ounce', 'teaspoons', 'teaspoon', 'cups', 'pounds' ]
         const unitsShort = ['tbsp', 'tbsp', 'oz', 'oz', 'tsp', 'tsp', 'cup', 'pound' ]
+        const units = [...unitsShort, 'kg', 'g', 'mg']
 
         const newIngredients = this.ingredients.map(el => {
             //Uniform units
-            let ingridient = el.toLowerCase()
+            let ingredient = el.toLowerCase()
             unitsLong.forEach((unit, i) => {
-                ingridient = ingridient.replace(unit, unitsShort[i])
+                ingredient = ingredient.replace(unit, unitsShort[i])
             })
 
             //Remove parentheses
-            ingridient = ingridient.replace(/ *\([^)]*\) */g, ' ')
+            ingredient = ingredient.replace(/ *\([^)]*\) */g, ' ')
 
             //Parse ingredients into count, unit an ingredients
-            const arrIng = ingridient.split(' ')
-            const unitIndex = arrIng.findIndex(el2 => unitsShort.includes(el2))
+            const arrIng = ingredient.split(' ')
+            const unitIndex = arrIng.findIndex(el2 => units.includes(el2))
 
             let objIng;
             if(unitIndex > -1){
@@ -63,7 +64,7 @@ export default class Recipe {
                 objIng = {
                     count,
                     unit: arrIng[unitIndex],
-                    ingridient: arrIng.slice(unitIndex + 1).join(' ')
+                    ingredient: arrIng.slice(unitIndex + 1).join(' ')
                 }
 
             } else if (parseInt(arrIng[0], 10)) {
@@ -71,7 +72,7 @@ export default class Recipe {
                 objIng = {
                     count: parseInt(arrIng[0], 10),
                     unit: '',
-                    ingridient: arrIng.slice(1).join(' ')
+                    ingredient: arrIng.slice(1).join(' ')
                 }
 
             } else if (unitIndex === -1){
@@ -79,7 +80,7 @@ export default class Recipe {
                 objIng = {
                     count: 1,
                     unit: '',
-                    ingridient
+                    ingredient
                 }
             }
 
